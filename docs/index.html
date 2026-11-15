@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Surplus Food App Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Evening shop light: deep pine for trust, amber for the price tag, single light theme on purpose */
+  --ink: #17282a;
+  --muted: #5d6e6f;
+  --bg: #eef2ef;
+  --surface: #ffffff;
+  --line: #d7e0dc;
+  --pine: #164a44;
+  --pine-soft: #e2eeea;
+  --amber: #e08a00;
+  --amber-soft: #fff1d6;
+  --ok: #1f7a3d;
+  --ok-soft: #e3f3e7;
+  --bad: #b3261e;
+  --bad-soft: #fbe9e7;
+  --display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: #c9d4cf; color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.4; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+
+.stage { height: 100%; display: flex; justify-content: center; align-items: center; padding: 16px; }
+.phone { width: 100%; max-width: 400px; height: min(860px, 100%); background: var(--bg); border-radius: 36px; box-shadow: 0 0 0 10px #1b2526, 0 24px 60px rgba(0,0,0,.35); overflow: hidden; display: flex; flex-direction: column; position: relative; }
+@media (max-width: 520px) {
+  .stage { padding: 0; }
+  .phone { max-width: none; height: 100%; border-radius: 0; box-shadow: none; }
+  body { background: var(--bg); }
+}
+
+.modebar { display: flex; gap: 6px; padding: 10px 12px; background: var(--ink); }
+.modebar button { flex: 1; border: 0; border-radius: 999px; padding: 8px 10px; background: transparent; color: #cfdcd8; font-weight: 700; font-size: 14px; }
+.modebar button[aria-pressed="true"] { background: var(--amber); color: #201400; }
+
+.screen { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+h1 { font-family: var(--display); font-weight: 800; font-size: 26px; line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 19px; margin: 0; }
+.sub { color: var(--muted); font-size: 14px; margin: 0; }
+.brand { font-family: var(--display); font-weight: 800; color: var(--pine); font-size: 15px; letter-spacing: .02em; }
+
+.nav { display: flex; border-top: 1px solid var(--line); background: var(--surface); }
+.nav button { flex: 1; border: 0; background: none; padding: 10px 4px 14px; font-size: 13px; color: var(--muted); display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.nav button[aria-current="page"] { color: var(--pine); font-weight: 700; }
+.nav svg { width: 22px; height: 22px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px; display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; text-align: left; width: 100%; }
+.card.soldout { opacity: .55; }
+.tile { width: 64px; height: 64px; border-radius: 14px; display: grid; place-items: center; }
+.tile svg { width: 34px; height: 34px; }
+.card .name { font-weight: 700; }
+.card .meta { color: var(--muted); font-size: 13px; }
+.price { text-align: right; font-variant-numeric: tabular-nums; }
+.price b { display: block; font-family: var(--display); font-size: 19px; color: var(--pine); }
+.price s { color: var(--muted); font-size: 13px; }
+.pill { display: inline-block; border-radius: 999px; padding: 2px 9px; font-size: 12px; font-weight: 700; }
+.pill.left { background: var(--amber-soft); color: #7a4a00; }
+.pill.out { background: var(--line); color: var(--muted); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+.pill.res { background: var(--pine-soft); color: var(--pine); }
+
+.btn { border: 0; border-radius: 14px; padding: 14px 16px; font-weight: 700; font-size: 17px; width: 100%; }
+.btn.primary { background: var(--pine); color: #fff; }
+.btn.amber { background: var(--amber); color: #201400; }
+.btn.ghost { background: transparent; border: 2px solid var(--line); color: var(--ink); }
+.btn.danger { background: transparent; border: 2px solid var(--bad-soft); color: var(--bad); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.link { background: none; border: 0; color: var(--pine); font-weight: 700; padding: 0; text-decoration: underline; }
+
+.hero { border-radius: 20px; height: 150px; display: grid; place-items: center; }
+.hero svg { width: 80px; height: 80px; }
+.rows { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+.rows > div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; border-top: 1px solid var(--line); }
+.rows > div:first-child { border-top: 0; }
+.rows span:first-child { color: var(--muted); }
+.rows span:last-child { text-align: right; font-weight: 700; }
+.note { background: var(--amber-soft); border-radius: 12px; padding: 10px 12px; font-size: 14px; }
+.note.info { background: var(--pine-soft); }
+.seg { display: flex; gap: 8px; }
+.seg button { flex: 1; border: 2px solid var(--line); background: var(--surface); border-radius: 12px; padding: 10px; font-weight: 700; }
+.seg button[aria-pressed="true"] { border-color: var(--pine); background: var(--pine-soft); color: var(--pine); }
+
+.code { font-family: var(--display); font-weight: 800; font-size: 54px; letter-spacing: .14em; text-align: center; background: var(--surface); border: 3px dashed var(--pine); border-radius: 18px; padding: 18px 8px; color: var(--pine); font-variant-numeric: tabular-nums; }
+.center { text-align: center; }
+
+.sheet-bg { position: absolute; inset: 0; background: rgba(15,25,26,.5); display: flex; align-items: flex-end; z-index: 5; }
+.sheet { background: var(--surface); width: 100%; border-radius: 22px 22px 0 0; padding: 20px 16px 24px; display: flex; flex-direction: column; gap: 12px; }
+.field label { display: block; font-size: 14px; color: var(--muted); margin-bottom: 4px; }
+.field input { width: 100%; border: 2px solid var(--line); border-radius: 12px; padding: 12px; font-size: 18px; background: var(--surface); }
+.field input:focus { border-color: var(--pine); outline: none; }
+
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 10px; text-align: center; }
+.stat b { display: block; font-family: var(--display); font-size: 28px; color: var(--pine); font-variant-numeric: tabular-nums; }
+.stat span { font-size: 13px; color: var(--muted); }
+.stepper { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px; gap: 10px; }
+.stepper .ctl { display: flex; align-items: center; gap: 14px; }
+.stepper button { width: 48px; height: 48px; border-radius: 14px; border: 0; background: var(--pine-soft); color: var(--pine); font-size: 26px; font-weight: 700; }
+.stepper output { font-family: var(--display); font-size: 28px; font-weight: 800; min-width: 28px; text-align: center; font-variant-numeric: tabular-nums; }
+.codein { display: flex; gap: 8px; }
+.codein input { flex: 1; min-width: 0; border: 2px solid var(--line); border-radius: 12px; padding: 12px; font-size: 20px; text-transform: uppercase; letter-spacing: .12em; font-weight: 700; }
+.codein button { width: auto; padding: 0 18px; }
+.res { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 10px 12px; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+.res .rc { font-family: var(--display); font-weight: 800; font-size: 20px; letter-spacing: .08em; }
+.res .rn { font-size: 14px; color: var(--muted); }
+.res .act { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.res .act .btn { padding: 12px 18px; width: auto; }
+.msg { font-size: 14px; min-height: 1.2em; margin: 0; }
+.msg.err { color: var(--bad); }
+.msg.good { color: var(--ok); }
+
+.day { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.day.off .grid4 { opacity: .4; }
+.dayhead { display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+.switch { width: 52px; height: 30px; border-radius: 999px; border: 0; background: var(--line); position: relative; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; transition: left .15s; }
+.switch[aria-checked="true"] { background: var(--pine); }
+.switch[aria-checked="true"]::after { left: 25px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.grid4 label { font-size: 12px; color: var(--muted); display: flex; flex-direction: column; gap: 2px; }
+.grid4 input { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 7px 6px; font-size: 15px; font-variant-numeric: tabular-nums; }
+
+.big { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.big .stat { text-align: left; padding: 12px; }
+.big .stat.wide { grid-column: span 2; }
+
+.map { background: #dfe8e2; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); }
+.map svg { display: block; width: 100%; height: auto; }
+.pin { cursor: pointer; }
+.pin:focus-visible { outline: none; }
+.pin:focus-visible rect { stroke: var(--amber); stroke-width: 3; }
+
+@media (prefers-reduced-motion: reduce) { .switch::after { transition: none; } }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="phone" id="phone">
+    <div class="modebar" role="group" aria-label="Prikaz">
+      <button id="m-user" aria-pressed="true">Kako vidi kupac</button>
+      <button id="m-partner" aria-pressed="false">Kako vidi radnja</button>
+    </div>
+    <main class="screen" id="screen"></main>
+    <nav class="nav" id="nav"></nav>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var ICONS = {
+    bakery: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 24c0-8 6-13 14-13s14 5 14 13v4a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/><path d="M14 17l3 6M20 15l2 7M26 17l1 6"/></svg>',
+    pastry: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 32h24M10 32V22h20v10M12 22v-6h16v6"/><path d="M20 16v-5M20 8v0"/></svg>',
+    restaurant: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="21" r="11"/><circle cx="20" cy="21" r="6"/><path d="M4 8v8M4 12h2M36 8v16"/></svg>',
+    grocery: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15h28l-3 16H9z"/><path d="M14 15l4-8M26 15l-4-8M15 21v5M20 21v5M25 21v5"/></svg>',
+    hotel: '<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 18h20v6a8 8 0 0 1-8 8h-4a8 8 0 0 1-8-8z"/><path d="M28 20h2a3 3 0 0 1 0 6h-2M14 8c0 3 2 3 2 6M20 8c0 3 2 3 2 6"/></svg>'
+  };
+  var CAT = {
+    bakery: { label: "Pekara", bg: "#fff1d6", fg: "#8a5300" },
+    pastry: { label: "Slastičarna", bg: "#fde7ee", fg: "#9b2c55" },
+    restaurant: { label: "Restoran", bg: "#e2eeea", fg: "#164a44" },
+    grocery: { label: "Market", bg: "#e6eefb", fg: "#24508f" },
+    hotel: { label: "Hotel", bg: "#efe9fb", fg: "#5a3d99" }
+  };
+
+  // Made-up shops for the demo. Prices in feninga.
+  var offers = [
+    { id: "zrno", name: "Pekara Zrno", cat: "bakery", addr: "Ferhadija 12", area: "Centar", dist: "350 m", price: 500, value: 1500, from: "20:00", to: "21:00", cancelUntil: "19:00", total: 6, desc: "Peciva, hljeb, burek ili pite od danas. Tačan sadržaj zavisi od toga šta ostane do zatvaranja.", x: 118, y: 150 },
+    { id: "lipa", name: "Slastičarna Lipa", cat: "pastry", addr: "Titova 31", area: "Centar", dist: "600 m", price: 600, value: 1800, from: "19:30", to: "20:30", cancelUntil: "18:30", total: 3, reserved: 1, desc: "Kolači i torte u komadu od današnje ponude.", x: 196, y: 196 },
+    { id: "basta", name: "Restoran Bašta", cat: "restaurant", addr: "Zmaja od Bosne 8", area: "Marijin Dvor", dist: "1,2 km", price: 800, value: 2400, from: "21:00", to: "21:45", cancelUntil: "20:00", total: 4, reserved: 1, desc: "Jedno toplo jelo s prilogom i salata, spakovano za ponijeti.", x: 262, y: 262 },
+    { id: "panorama", name: "Hotel Panorama", cat: "hotel", addr: "Kolodvorska 4", area: "Novo Sarajevo", dist: "1,8 km", price: 700, value: 2100, from: "10:30", to: "11:00", cancelUntil: "09:30", total: 2, reserved: 1, desc: "Ostaci s doručka: peciva, sir, suhomesnato i voće.", x: 300, y: 330, tomorrow: true },
+    { id: "mahala", name: "Market Kod Mahale", cat: "grocery", addr: "Grbavička 50", area: "Novo Sarajevo", dist: "2,4 km", price: 400, value: 1200, from: "19:00", to: "20:00", cancelUntil: "18:00", total: 5, reserved: 5, desc: "Voće, povrće i mliječni proizvodi kojima ističe rok.", x: 210, y: 380 }
+  ];
+
+  // The partner side is Pekara Zrno. These are its reservations for today.
+  var partnerRes = [
+    { code: "K7M4P", name: "Amra", qty: 1, status: "reserved" },
+    { code: "R3TQ9", name: "Edin", qty: 2, status: "reserved" },
+    { code: "H8WXC", name: "Lejla", qty: 1, status: "picked" }
+  ];
+  var zrnoCancelled = false;
+
+  var myRes = []; // { offerId, code, qty, status }
+
+  var plan = [
+    { d: "Ponedjeljak", on: true, q: 6, p: "5,00", f: "20:00", t: "21:00" },
+    { d: "Utorak", on: true, q: 6, p: "5,00", f: "20:00", t: "21:00" },
+    { d: "Srijeda", on: true, q: 5, p: "5,00", f: "20:00", t: "21:00" },
+    { d: "Četvrtak", on: true, q: 6, p: "5,00", f: "20:00", t: "21:00" },
+    { d: "Petak", on: true, q: 8, p: "5,00", f: "20:00", t: "21:00" },
+    { d: "Subota", on: true, q: 6, p: "5,00", f: "19:00", t: "20:00" },
+    { d: "Nedjelja", on: false, q: 0, p: "5,00", f: "19:00", t: "20:00" }
+  ];
+
+  var st = { mode: "user", uview: "list", sel: null, qty: 1, sheet: null, lastRes: null, pview: "today", pmsg: "", pmsgType: "", confirm: false, planMsg: "" };
+
+  var $screen = document.getElementById("screen");
+  var $nav = document.getElementById("nav");
+  var $phone = document.getElementById("phone");
+
+  function km(f) { return (f / 100).toFixed(2).replace(".", ",") + " KM"; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function bags(n) {
+    var a = n % 10, b = n % 100;
+    if (a === 1 && b !== 11) return n + " kesica";
+    if (a >= 2 && a <= 4 && (b < 12 || b > 14)) return n + " kesice";
+    return n + " kesica";
+  }
+  function byId(id) { for (var i = 0; i < offers.length; i++) if (offers[i].id === id) return offers[i]; }
+  function reservedOf(o) {
+    if (o.id === "zrno") {
+      if (zrnoCancelled) return o.total;
+      return partnerRes.filter(function (r) { return r.status !== "cancelled"; }).reduce(function (s, r) { return s + r.qty; }, 0);
+    }
+    var mine = myRes.filter(function (r) { return r.offerId === o.id && r.status === "reserved"; }).reduce(function (s, r) { return s + r.qty; }, 0);
+    return (o.reserved || 0) + mine;
+  }
+  function leftOf(o) { return Math.max(0, o.total - reservedOf(o)); }
+  function newCode() {
+    var al = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789", c = "";
+    for (var i = 0; i < 5; i++) c += al[Math.floor(Math.random() * al.length)];
+    return c;
+  }
+  function tile(cat, cls) {
+    var c = CAT[cat];
+    return '<div class="' + cls + '" style="background:' + c.bg + ';color:' + c.fg + '" aria-hidden="true">' + ICONS[cat] + "</div>";
+  }
+
+  var NAVICON = {
+    list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+    map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg>',
+    mine: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>',
+    today: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>',
+    plan: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16M8 4v6M14 9v6M10 14v6"/></svg>',
+    numbers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>'
+  };
+
+  function renderNav() {
+    var items = st.mode === "user"
+      ? [["list", "Ponude"], ["map", "Mapa"], ["mine", "Moje"]]
+      : [["today", "Danas"], ["plan", "Sedmični plan"], ["numbers", "Brojevi"]];
+    var cur = st.mode === "user" ? (st.uview === "detail" || st.uview === "reservation" ? "" : st.uview) : st.pview;
+    $nav.innerHTML = items.map(function (it) {
+      return '<button data-nav="' + it[0] + '"' + (cur === it[0] ? ' aria-current="page"' : "") + ">" + NAVICON[it[0]] + "<span>" + it[1] + "</span></button>";
+    }).join("");
+  }
+
+  /* ---------- Customer side ---------- */
+
+  function cardHtml(o) {
+    var left = leftOf(o);
+    var when = (o.tomorrow ? "Sutra " : "Danas ") + o.from + "–" + o.to;
+    return '<button class="card' + (left ? "" : " soldout") + '" data-open="' + o.id + '">' +
+      tile(o.cat, "tile") +
+      '<div><div class="name">' + esc(o.name) + '</div><div class="meta">' + CAT[o.cat].label + " · " + o.dist + '</div><div class="meta">' + when + "</div>" +
+      '<div style="margin-top:4px">' + (left ? '<span class="pill left">Još ' + bags(left) + "</span>" : '<span class="pill out">Rasprodano</span>') + "</div></div>" +
+      '<div class="price"><b>' + km(o.price) + "</b><s>" + km(o.value) + "</s></div></button>";
+  }
+
+  function vList() {
+    return '<div class="top"><div><span class="brand">Spasi obrok</span><h1>Ponude u blizini</h1></div></div>' +
+      '<p class="sub">Dobra hrana za trećinu cijene. Rezervišete u aplikaciji, platite u radnji.</p>' +
+      offers.map(cardHtml).join("");
+  }
+
+  function vMap() {
+    var pins = offers.map(function (o) {
+      var left = leftOf(o), c = CAT[o.cat];
+      return '<g class="pin" tabindex="0" role="button" aria-label="' + esc(o.name) + ", " + km(o.price) + '" data-open="' + o.id + '" transform="translate(' + o.x + "," + o.y + ')">' +
+        '<rect x="-34" y="-34" width="68" height="26" rx="13" fill="' + (left ? "#164a44" : "#9aa8a6") + '"/>' +
+        '<text x="0" y="-16" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="13" fill="#fff">' + km(o.price) + "</text>" +
+        '<path d="M-6 -8 L0 0 L6 -8 Z" fill="' + (left ? "#164a44" : "#9aa8a6") + '"/></g>';
+    }).join("");
+    return '<div class="top"><div><span class="brand">Spasi obrok</span><h1>Mapa ponuda</h1></div></div>' +
+      '<p class="sub">Dodirnite cijenu da vidite ponudu.</p>' +
+      '<div class="map"><svg viewBox="0 0 360 460" role="img" aria-label="Skica mape Centra i Novog Sarajeva">' +
+      '<rect width="360" height="460" fill="#dfe8e2"/>' +
+      '<path d="M0 120 C 80 150, 150 120, 220 170 S 330 230, 360 220" fill="none" stroke="#a9c7d6" stroke-width="14" stroke-linecap="round"/>' +
+      '<text x="10" y="106" font-family="Atkinson Hyperlegible, sans-serif" font-size="12" fill="#4f7486">Miljacka</text>' +
+      '<path d="M40 210 L360 330 M60 60 L120 460 M0 290 L360 410 M170 0 L250 460" stroke="#fff" stroke-width="9" fill="none"/>' +
+      '<text x="18" y="452" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#5d6e6f">Skica za demo. Prava aplikacija koristi OpenStreetMap.</text>' +
+      '<circle cx="80" cy="300" r="9" fill="#e08a00" stroke="#fff" stroke-width="3"/>' +
+      '<text x="94" y="305" font-family="Atkinson Hyperlegible, sans-serif" font-size="12" font-weight="700" fill="#17282a">Vi ste ovdje</text>' +
+      pins + "</svg></div>";
+  }
+
+  function vDetail() {
+    var o = byId(st.sel), left = leftOf(o), maxQ = Math.min(2, left);
+    if (st.qty > maxQ) st.qty = Math.max(1, maxQ);
+    var mapUrl = "https://www.openstreetmap.org/search?query=" + encodeURIComponent(o.addr + ", Sarajevo");
+    return '<button class="link" data-back>‹ Nazad na ponude</button>' +
+      '<div class="hero" style="background:' + CAT[o.cat].bg + ";color:" + CAT[o.cat].fg + '" aria-hidden="true">' + ICONS[o.cat] + "</div>" +
+      "<div><h1>" + esc(o.name) + '</h1><p class="sub">' + CAT[o.cat].label + " · " + esc(o.area) + " · " + o.dist + "</p></div>" +
+      '<div><h2>Šta je u kesici</h2><p style="margin:4px 0 0">' + esc(o.desc) + "</p></div>" +
+      '<div class="rows">' +
+      "<div><span>Cijena</span><span>" + km(o.price) + ' <s style="color:var(--muted);font-weight:400">' + km(o.value) + "</s></span></div>" +
+      "<div><span>Preuzimanje</span><span>" + (o.tomorrow ? "Sutra " : "Danas ") + o.from + "–" + o.to + "</span></div>" +
+      "<div><span>Adresa</span><span>" + esc(o.addr) + '<br><a class="link" href="' + mapUrl + '" target="_blank" rel="noopener">Otvori u mapama</a></span></div>' +
+      "<div><span>Preostalo</span><span>" + (left ? bags(left) : "Rasprodano") + "</span></div></div>" +
+      (left ? '<div><p class="sub" style="margin-bottom:6px">Koliko kesica?</p><div class="seg">' +
+        '<button data-qty="1" aria-pressed="' + (st.qty === 1) + '">1</button>' +
+        '<button data-qty="2" aria-pressed="' + (st.qty === 2) + '"' + (maxQ < 2 ? " disabled" : "") + ">2</button></div></div>" +
+        '<div class="note">Plaćate u radnji, gotovinom ili karticom. Besplatno otkazivanje do ' + o.cancelUntil + ".</div>" +
+        '<button class="btn primary" data-reserve>Rezerviši za ' + km(o.price * st.qty) + "</button>"
+        : '<div class="note info">Danas je sve rasprodano. Ponuda se obnavlja svaki dan.</div>');
+  }
+
+  function vReservation() {
+    var r = st.lastRes, o = byId(r.offerId);
+    if (r.status === "cancelled") {
+      return '<h1>Rezervacija je otkazana</h1><p class="sub">' + (r.qty > 1 ? "Kesice su vraćene" : "Kesica je vraćena") + " u ponudu za druge kupce.</p>" +
+        '<button class="btn primary" data-nav="list">Nazad na ponude</button>';
+    }
+    if (r.status === "picked") {
+      return '<h1>Preuzeto. Prijatno!</h1><p class="sub">Radnja je potvrdila preuzimanje. Kako je bilo?</p>' +
+        '<div class="seg">' + [1, 2, 3, 4, 5].map(function (n) { return '<button data-star="' + n + '" aria-pressed="' + (r.stars === n) + '" aria-label="' + n + ' od 5">' + n + "★</button>"; }).join("") + "</div>" +
+        (r.stars ? '<p class="msg good">Hvala na ocjeni.</p>' : "") +
+        '<button class="btn ghost" data-nav="list">Nazad na ponude</button>';
+    }
+    return '<span class="pill ok" style="align-self:flex-start">Rezervacija je potvrđena</span>' +
+      '<div><h2>Vaš kod za preuzimanje</h2><p class="sub">Pokažite ovaj kod osoblju u radnji.</p></div>' +
+      '<div class="code" aria-label="Kod ' + r.code.split("").join(" ") + '">' + r.code + "</div>" +
+      '<div class="rows">' +
+      "<div><span>Radnja</span><span>" + esc(o.name) + "</span></div>" +
+      "<div><span>Preuzimanje</span><span>" + (o.tomorrow ? "Sutra " : "Danas ") + o.from + "–" + o.to + "</span></div>" +
+      "<div><span>Adresa</span><span>" + esc(o.addr) + "</span></div>" +
+      "<div><span>Plaćate u radnji</span><span>" + km(o.price * r.qty) + " (" + bags(r.qty) + ")</span></div></div>" +
+      (o.id === "zrno" ? '<div class="note info">Demo: prebacite gore na "Kako vidi radnja" i vidjet ćete ovu rezervaciju na listi radnje.</div>' : "") +
+      '<button class="btn danger" data-cancel-mine>Otkaži rezervaciju</button>' +
+      '<p class="sub center">Otkazivanje je moguće do ' + o.cancelUntil + ".</p>";
+  }
+
+  function vMine() {
+    var html = '<h1>Moje rezervacije</h1>';
+    if (!myRes.length) return html + '<p class="sub">Još nemate rezervacija. Pogledajte ponude u blizini.</p><button class="btn primary" data-nav="list">Pogledaj ponude</button>';
+    var order = { reserved: 0, picked: 1, cancelled: 2 };
+    var list = myRes.slice().sort(function (a, b) { return order[a.status] - order[b.status]; });
+    return html + list.map(function (r) {
+      var o = byId(r.offerId);
+      var pill = r.status === "reserved" ? '<span class="pill res">Rezervisano · ' + r.code + "</span>" : r.status === "picked" ? '<span class="pill ok">Preuzeto</span>' : '<span class="pill out">Otkazano</span>';
+      return '<button class="card" data-myres="' + r.code + '">' + tile(o.cat, "tile") +
+        '<div><div class="name">' + esc(o.name) + '</div><div class="meta">' + (o.tomorrow ? "Sutra " : "Danas ") + o.from + "–" + o.to + '</div><div style="margin-top:4px">' + pill + "</div></div>" +
+        '<div class="price"><b>' + km(o.price * r.qty) + "</b></div></button>";
+    }).join("");
+  }
+
+  function sheetHtml() {
+    if (!st.sheet) return "";
+    var inner;
+    if (st.sheet === "phone") {
+      inner = '<h2>Prijava brojem telefona</h2>' +
+        '<p class="sub">Jedan broj, jedan račun. Tako radnja zna da rezervacija dolazi od stvarne osobe.</p>' +
+        '<div class="field"><label for="ph">Broj telefona</label><input id="ph" inputmode="tel" value="+387 61 123 456"></div>' +
+        '<button class="btn primary" data-sheet-next>Pošalji kod</button><button class="btn ghost" data-sheet-close>Odustani</button>';
+    } else {
+      inner = '<h2>Unesite kod iz SMS-a</h2>' +
+        '<p class="sub">Kod je poslan na +387 61 123 456. Za demo je već upisan.</p>' +
+        '<div class="field"><label for="otp">Kod (6 cifara)</label><input id="otp" inputmode="numeric" value="482913"></div>' +
+        '<button class="btn primary" data-sheet-confirm>Potvrdi i rezerviši</button><button class="btn ghost" data-sheet-close>Odustani</button>';
+    }
+    return '<div class="sheet-bg" data-sheet-close-bg><div class="sheet" role="dialog" aria-modal="true">' + inner + "</div></div>";
+  }
+
+  /* ---------- Shop side ---------- */
+
+  function zrnoTotals() {
+    var o = byId("zrno");
+    var active = partnerRes.filter(function (r) { return r.status !== "cancelled"; });
+    return {
+      offered: o.total,
+      reserved: active.reduce(function (s, r) { return s + r.qty; }, 0),
+      picked: active.filter(function (r) { return r.status === "picked"; }).reduce(function (s, r) { return s + r.qty; }, 0)
+    };
+  }
+
+  function vToday() {
+    var t = zrnoTotals();
+    var head = '<div><span class="brand">Panel za radnju</span><h1>Pekara Zrno</h1><p class="sub">Ferhadija 12 · Danas, preuzimanje 20:00–21:00</p></div>';
+    if (zrnoCancelled) {
+      return head + '<div class="note">Ponuda za danas je otkazana. Kupci s rezervacijom su dobili SMS. To im se ne računa kao nedolazak.</div>' +
+        '<button class="btn ghost" data-restore>Vrati ponudu (demo)</button>';
+    }
+    var open = partnerRes.filter(function (r) { return r.status === "reserved"; }).length;
+    var list = partnerRes.filter(function (r) { return r.status !== "cancelled"; }).map(function (r, i) {
+      var idx = partnerRes.indexOf(r);
+      var right = r.status === "reserved"
+        ? '<button class="btn amber" data-pick="' + idx + '">Preuzeto</button>'
+        : '<span class="pill ok">Preuzeto ✓</span><button class="link" data-undo="' + idx + '">Poništi</button>';
+      return '<div class="res"><div><div class="rc">' + r.code + '</div><div class="rn">' + esc(r.name) + " · " + bags(r.qty) + " · " + km(500 * r.qty) + '</div></div><div class="act">' + right + "</div></div>";
+    }).join("");
+    return head +
+      '<div class="stats"><div class="stat"><b>' + t.offered + '</b><span>Ponuđeno</span></div><div class="stat"><b>' + t.reserved + '</b><span>Rezervisano</span></div><div class="stat"><b>' + t.picked + '</b><span>Preuzeto</span></div></div>' +
+      '<div class="stepper"><div><b>Broj kesica danas</b><div class="sub">Ne može ispod rezervisanih (' + t.reserved + ")</div></div>" +
+      '<div class="ctl"><button data-step="-1" aria-label="Jedna kesica manje">−</button><output>' + t.offered + '</output><button data-step="1" aria-label="Jedna kesica više">+</button></div></div>' +
+      '<div><label for="codein" class="sub">Kupac pokaže kod, vi ga upišete</label><form class="codein" id="codeform" style="margin-top:6px"><input id="codein" maxlength="5" autocomplete="off" placeholder="K7M4P"><button class="btn primary" type="submit">Potvrdi</button></form>' +
+      '<p class="msg ' + st.pmsgType + '" role="status">' + esc(st.pmsg) + "</p></div>" +
+      "<h2>Rezervacije (" + open + " čeka)</h2>" + list +
+      '<p class="sub">Ko ne dođe do 21:15, sistem ga sam označi kao nedolazak. Za nepreuzetu kesicu ne plaćate ništa.</p>' +
+      '<button class="btn danger" data-askcancel>Otkaži ponudu za danas</button>' +
+      (st.confirm ? confirmHtml(open) : "");
+  }
+
+  function confirmHtml(open) {
+    return '<div class="sheet-bg"><div class="sheet" role="dialog" aria-modal="true"><h2>Otkazati današnju ponudu?</h2>' +
+      '<p class="sub">' + (open ? "Kupci s rezervacijom (" + open + ") dobiće SMS da je ponuda otkazana." : "Niko još nema otvorenu rezervaciju.") + " Ovo im se ne računa kao nedolazak.</p>" +
+      '<button class="btn danger" data-docancel>Da, otkaži za danas</button><button class="btn ghost" data-nocancel>Ne, vrati se</button></div></div>';
+  }
+
+  function vPlan() {
+    return '<div><span class="brand">Panel za radnju</span><h1>Sedmični plan</h1></div>' +
+      '<p class="sub">Upišete jednom. Ponuda se svaki dan objavi sama u 5 ujutro. Za jedan dan je mijenjate na ekranu "Danas".</p>' +
+      plan.map(function (p, i) {
+        return '<div class="day' + (p.on ? "" : " off") + '"><div class="dayhead"><span>' + p.d + '</span><button class="switch" role="switch" aria-checked="' + p.on + '" aria-label="' + p.d + ' uključen" data-toggle="' + i + '"></button></div>' +
+          '<div class="grid4">' +
+          '<label>Kesica<input id="q' + i + '" data-f="q" data-i="' + i + '" inputmode="numeric" value="' + p.q + '"></label>' +
+          '<label>Cijena KM<input id="p' + i + '" data-f="p" data-i="' + i + '" inputmode="decimal" value="' + p.p + '"></label>' +
+          '<label>Od<input id="f' + i + '" data-f="f" data-i="' + i + '" value="' + p.f + '"></label>' +
+          '<label>Do<input id="t' + i + '" data-f="t" data-i="' + i + '" value="' + p.t + '"></label></div></div>';
+      }).join("") +
+      '<button class="btn ghost" data-copyall>Kopiraj ponedjeljak na sve dane</button>' +
+      '<p class="msg good" role="status">' + esc(st.planMsg) + "</p>";
+  }
+
+  function vNumbers() {
+    return '<div><span class="brand">Panel za radnju</span><h1>Brojevi za novembar</h1><p class="sub">Pekara Zrno, od 1. do 14. novembra 2026 (primjer)</p></div>' +
+      '<div class="big">' +
+      '<div class="stat wide"><span>Zarada radnje od kesica</span><b>520,00 KM</b><span>Novac za hranu koja bi inače bila bačena</span></div>' +
+      '<div class="stat"><b>112</b><span>Rezervisano kesica</span></div>' +
+      '<div class="stat"><b>104</b><span>Preuzeto</span></div>' +
+      '<div class="stat"><b>8</b><span>Nisu došli</span></div>' +
+      '<div class="stat"><b>61</b><span>Različitih kupaca</span></div></div>' +
+      '<div class="rows"><div><span>Naknada aplikaciji</span><span>0,00 KM</span></div>' +
+      "<div><span>Besplatni period</span><span>do 14. 2. 2027.</span></div>" +
+      "<div><span>Poslije toga</span><span>1 KM po preuzetoj kesici</span></div></div>" +
+      '<p class="sub">Primjer: sa 104 preuzete kesice naknada bi bila 104 KM, a radnja bi zaradila 520 KM.</p>';
+  }
+
+  /* ---------- Render and events ---------- */
+
+  function render() {
+    document.getElementById("m-user").setAttribute("aria-pressed", st.mode === "user");
+    document.getElementById("m-partner").setAttribute("aria-pressed", st.mode === "partner");
+    var html;
+    if (st.mode === "user") {
+      html = { list: vList, map: vMap, detail: vDetail, reservation: vReservation, mine: vMine }[st.uview]() + sheetHtml();
+    } else {
+      html = { today: vToday, plan: vPlan, numbers: vNumbers }[st.pview]();
+    }
+    $screen.innerHTML = html;
+    renderNav();
+  }
+  function go(fn) { fn(); render(); $screen.scrollTop = 0; }
+  function update(fn) { var y = $screen.scrollTop; fn(); render(); $screen.scrollTop = y; }
+
+  document.getElementById("m-user").addEventListener("click", function () { go(function () { st.mode = "user"; st.confirm = false; }); });
+  document.getElementById("m-partner").addEventListener("click", function () { go(function () { st.mode = "partner"; st.sheet = null; st.pmsg = ""; }); });
+
+  $nav.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-nav]"); if (!b) return;
+    var v = b.getAttribute("data-nav");
+    go(function () { if (st.mode === "user") st.uview = v; else { st.pview = v; st.pmsg = ""; st.planMsg = ""; } });
+  });
+
+  $phone.addEventListener("click", function (e) {
+    var t = e.target;
+    var el;
+    if ((el = t.closest("[data-open]"))) { var id = el.getAttribute("data-open"); return go(function () { st.sel = id; st.qty = 1; st.uview = "detail"; }); }
+    if (t.closest("[data-back]")) return go(function () { st.uview = "list"; });
+    if ((el = t.closest("[data-qty]")) && !el.disabled) { var q = +el.getAttribute("data-qty"); return update(function () { st.qty = q; }); }
+    if (t.closest("[data-reserve]")) return update(function () { st.sheet = "phone"; });
+    if (t.closest("[data-sheet-next]")) return update(function () { st.sheet = "otp"; });
+    if (t.closest("[data-sheet-close]") || (t.hasAttribute && t.hasAttribute("data-sheet-close-bg"))) return update(function () { st.sheet = null; });
+    if (t.closest("[data-sheet-confirm]")) return go(function () {
+      var o = byId(st.sel), code = newCode(), r = { offerId: o.id, code: code, qty: st.qty, status: "reserved" };
+      myRes.push(r);
+      if (o.id === "zrno") partnerRes.push({ code: code, name: "Vi (demo kupac)", qty: st.qty, status: "reserved", mine: r });
+      st.lastRes = r; st.sheet = null; st.uview = "reservation";
+    });
+    if (t.closest("[data-cancel-mine]")) return update(function () {
+      var r = st.lastRes; r.status = "cancelled";
+      partnerRes.forEach(function (p) { if (p.mine === r) p.status = "cancelled"; });
+    });
+    if ((el = t.closest("[data-myres]"))) { var c = el.getAttribute("data-myres"); return go(function () { st.lastRes = myRes.filter(function (r) { return r.code === c; })[0]; st.uview = "reservation"; }); }
+    if ((el = t.closest("[data-star]"))) { var s = +el.getAttribute("data-star"); return update(function () { st.lastRes.stars = s; }); }
+
+    if ((el = t.closest("[data-pick]"))) { var i = +el.getAttribute("data-pick"); return update(function () { setPicked(partnerRes[i], true); st.pmsg = "Kod " + partnerRes[i].code + " je preuzet."; st.pmsgType = "good"; }); }
+    if ((el = t.closest("[data-undo]"))) { var j = +el.getAttribute("data-undo"); return update(function () { setPicked(partnerRes[j], false); st.pmsg = "Preuzimanje za " + partnerRes[j].code + " je poništeno."; st.pmsgType = ""; }); }
+    if ((el = t.closest("[data-step]"))) {
+      var d = +el.getAttribute("data-step");
+      return update(function () {
+        var o = byId("zrno"), tt = zrnoTotals(), n = o.total + d;
+        if (n < tt.reserved) { st.pmsg = "Ne može ispod broja rezervisanih kesica (" + tt.reserved + ")."; st.pmsgType = "err"; return; }
+        if (n > 30) return;
+        o.total = n; st.pmsg = "";
+      });
+    }
+    if (t.closest("[data-askcancel]")) return update(function () { st.confirm = true; });
+    if (t.closest("[data-nocancel]")) return update(function () { st.confirm = false; });
+    if (t.closest("[data-docancel]")) return go(function () {
+      st.confirm = false; zrnoCancelled = true;
+      partnerRes.forEach(function (p) { if (p.status === "reserved") { p.status = "cancelled"; p.byShop = true; if (p.mine) p.mine.status = "cancelled"; } });
+    });
+    if (t.closest("[data-restore]")) return go(function () {
+      zrnoCancelled = false;
+      partnerRes.forEach(function (p) { if (p.byShop) { p.status = "reserved"; p.byShop = false; if (p.mine) p.mine.status = "reserved"; } });
+      st.pmsg = "";
+    });
+    if ((el = t.closest("[data-toggle]"))) { var k = +el.getAttribute("data-toggle"); return update(function () { plan[k].on = !plan[k].on; if (plan[k].on && !plan[k].q) plan[k].q = plan[0].q; st.planMsg = "Sačuvano."; }); }
+    if (t.closest("[data-copyall]")) return update(function () {
+      var m = plan[0];
+      plan.forEach(function (p, i) { if (i) { p.on = true; p.q = m.q; p.p = m.p; p.f = m.f; p.t = m.t; } });
+      st.planMsg = "Ponedjeljak je kopiran na sve dane. Sačuvano.";
+    });
+  });
+
+  function setPicked(r, yes) {
+    r.status = yes ? "picked" : "reserved";
+    if (r.mine) r.mine.status = r.status;
+  }
+
+  $phone.addEventListener("submit", function (e) {
+    if (e.target.id !== "codeform") return;
+    e.preventDefault();
+    var val = document.getElementById("codein").value.trim().toUpperCase();
+    update(function () {
+      var hit = partnerRes.filter(function (r) { return r.code === val; })[0];
+      if (!val) { st.pmsg = "Upišite kod od 5 znakova."; st.pmsgType = "err"; }
+      else if (!hit || hit.status === "cancelled") { st.pmsg = "Kod " + val + " nije pronađen za danas. Provjerite slova."; st.pmsgType = "err"; }
+      else if (hit.status === "picked") { st.pmsg = "Kod " + val + " je već preuzet."; st.pmsgType = "err"; }
+      else { setPicked(hit, true); st.pmsg = "Kod " + val + " je preuzet: " + bags(hit.qty) + ", naplatite " + km(500 * hit.qty) + "."; st.pmsgType = "good"; }
+    });
+  });
+
+  $phone.addEventListener("change", function (e) {
+    var el = e.target; if (!el.hasAttribute("data-f")) return;
+    var p = plan[+el.getAttribute("data-i")], f = el.getAttribute("data-f");
+    p[f] = f === "q" ? Math.max(0, parseInt(el.value, 10) || 0) : el.value;
+    st.planMsg = "Sačuvano.";
+    update(function () {});
+  });
+
+  $phone.addEventListener("keydown", function (e) {
+    if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("pin")) { e.preventDefault(); e.target.dispatchEvent(new MouseEvent("click", { bubbles: true })); }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
